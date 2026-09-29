@@ -94,68 +94,70 @@
 
   <script>
 
-    const status =
-      document.getElementById("status");
-    
-    const APPS_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbzm090NeGlBQTnfZyB8uZHUWmUMWv8Ar7yI5EUNs4G3F6RiM0IpRxXh9eRDwIA1xwdydg/exec";
+  const APPS_SCRIPT_URL =
+    "YOUR-APPS-SCRIPT-EXEC-URL-HERE";
 
-    const scanner =
-      new Html5Qrcode("reader");
+  const status =
+    document.getElementById("status");
 
-    scanner.start(
-      {
-        facingMode: "environment"
-      },
-      {
-        fps: 10,
-        qrbox: {
-          width: 250,
-          height: 250
-        }
-      },
+  const scanner =
+    new Html5Qrcode("reader");
 
-   function(decodedText) {
 
-  status.textContent =
-    "QR detected. Verifying guest...";
-
-  scanner.stop()
-    .then(function() {
-
-      const checkinUrl =
-        APPS_SCRIPT_URL +
-        "?page=checkin&passId=" +
-        encodeURIComponent(decodedText);
-
-      window.location.href =
-        checkinUrl;
-
-    });
-
-}
-
-          });
-
-      },
-
-      function(errorMessage) {
-
-        // Normal scanning errors are ignored.
-
+  scanner.start(
+    {
+      facingMode: "environment"
+    },
+    {
+      fps: 10,
+      qrbox: {
+        width: 250,
+        height: 250
       }
+    },
 
-    ).catch(function(error) {
-
-      console.error(error);
+    function(decodedText) {
 
       status.textContent =
-        "Camera could not be opened. " +
-        "Please allow camera access.";
+        "QR detected: " +
+        decodedText;
 
-    });
+      scanner.stop()
+        .then(function() {
 
-  </script>
+          const checkinUrl =
+            APPS_SCRIPT_URL +
+            "?page=checkin&passId=" +
+            encodeURIComponent(
+              decodedText
+            );
 
+          window.location.href =
+            checkinUrl;
+
+        });
+
+    },
+
+    function(errorMessage) {
+
+      // Normal scanning errors are ignored.
+
+    }
+
+  ).catch(function(error) {
+
+    console.error(
+      "Camera error:",
+      error
+    );
+
+    status.textContent =
+      "Camera could not be opened. " +
+      "Please allow camera access.";
+
+  });
+
+</script>
 </body>
 </html>
