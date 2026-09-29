@@ -96,6 +96,9 @@
 
     const status =
       document.getElementById("status");
+    
+    const APPS_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbzm090NeGlBQTnfZyB8uZHUWmUMWv8Ar7yI5EUNs4G3F6RiM0IpRxXh9eRDwIA1xwdydg/exec";
 
     const scanner =
       new Html5Qrcode("reader");
@@ -112,19 +115,25 @@
         }
       },
 
-      function(decodedText) {
+   function(decodedText) {
 
-        status.textContent =
-          "QR detected: " +
-          decodedText;
+  status.textContent =
+    "QR detected. Verifying guest...";
 
-        scanner.stop()
-          .then(function() {
+  scanner.stop()
+    .then(function() {
 
-            console.log(
-              "PASS ID:",
-              decodedText
-            );
+      const checkinUrl =
+        APPS_SCRIPT_URL +
+        "?page=checkin&passId=" +
+        encodeURIComponent(decodedText);
+
+      window.location.href =
+        checkinUrl;
+
+    });
+
+}
 
           });
 
